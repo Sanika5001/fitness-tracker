@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitTrack - Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Left sidebar (170px) -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <span class="sidebar-brand">FitTrack</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-view="dashboard">Dashboard</button>
+        <button class="nav-item" data-view="log">Log exercise</button>
+        <button class="nav-item" data-view="plans">Workout plans</button>
+        <button class="nav-item" data-view="history">History</button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-profile">
+          <div class="avatar-circle" id="user-initials">U</div>
+          <div class="user-meta">
+            <div class="user-name" id="user-display-name">User</div>
+            <div class="user-weight" id="user-display-weight">-- kg</div>
+          </div>
+        </div>
+        <button class="btn btn-secondary btn-logout" id="logout-btn">Log out</button>
+      </div>
+    </aside>
+
+    <!-- Main area -->
+    <main class="main-content">
+      <header class="main-header">
+        <div>
+          <h1 class="header-greeting" id="greeting-text">Good morning, User</h1>
+          <div class="header-date" id="today-date-text">Today</div>
+        </div>
+        <button class="btn btn-primary" id="header-log-btn">Log exercise</button>
+      </header>
+
+      <div class="view-content">
+        <!-- View 1: Dashboard -->
+        <section id="view-dashboard" class="view-panel active">
+          <div class="summary-grid">
+            <div class="card">
+              <div class="card-title">Calories today</div>
+              <div class="card-value" id="card-calories">0 kcal</div>
+              <div class="card-subtext" id="card-goal-subtext">Target: 500 kcal</div>
+            </div>
+            <div class="card">
+              <div class="card-title">Active time</div>
+              <div class="card-value" id="card-minutes">0 min</div>
+              <div class="card-subtext">Logged today</div>
+            </div>
+            <div class="card">
+              <div class="card-title">Streak</div>
+              <div class="card-value" id="card-streak">0 days</div>
+              <div class="card-subtext">Consecutive active days</div>
+            </div>
+          </div>
+
+          <div class="dashboard-grid">
+            <!-- This week card -->
+            <div class="card">
+              <h2 class="brand-title" style="font-size: 16px; margin-bottom: 4px;">This week</h2>
+              <div class="card-subtext">Daily calorie burn</div>
+              <div class="chart-container" id="week-chart">
+                <!-- 7 bars populated by JS -->
+              </div>
+            </div>
+
+            <!-- Today card -->
+            <div class="card">
+              <h2 class="brand-title" style="font-size: 16px; margin-bottom: 4px;">Today</h2>
+              <div class="progress-container">
+                <div class="progress-track">
+                  <div class="progress-fill" id="goal-progress-bar" style="--progress-width: 0%;"></div>
+                </div>
+              </div>
+              <div class="progress-label" id="goal-progress-text">0 of 500 kcal goal</div>
+
+              <div class="exercise-list" id="today-exercise-list">
+                <!-- List populated by JS -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- View 2: Log exercise -->
+        <section id="view-log" class="view-panel">
+          <div class="card form-card">
+            <h2 class="brand-title" style="font-size: 18px; margin-bottom: 4px;">Log exercise</h2>
+            <p class="brand-subtitle">Record your completed activity</p>
+
+            <form id="log-exercise-form">
+              <div class="form-group">
+                <label class="form-label" for="log-type">Exercise type</label>
+                <select class="form-control" id="log-type">
+                  <option value="cardio">Cardio</option>
+                  <option value="strength">Strength</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="log-name">Exercise name</label>
+                <input class="form-control" type="text" id="log-name" placeholder="e.g. Running, Bench press" required>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="log-duration">Duration (minutes)</label>
+                <input class="form-control" type="number" id="log-duration" min="1" max="1440" value="30" required>
+              </div>
+
+              <!-- Cardio group -->
+              <div id="cardio-fields">
+                <div class="form-group">
+                  <label class="form-label" for="log-met">MET (metabolic equivalent)</label>
+                  <input class="form-control" type="number" id="log-met" step="0.1" min="0.5" max="30" value="6.0">
+                  <span class="form-hint">Walking 3.0, Cycling 7.0, Running 9.8</span>
+                </div>
+              </div>
+
+              <!-- Strength group -->
+              <div id="strength-fields" style="display: none;">
+                <div class="form-grid-2">
+                  <div class="form-group">
+                    <label class="form-label" for="log-sets">Sets</label>
+                    <input class="form-control" type="number" id="log-sets" min="1" max="100" value="3">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="log-reps">Reps per set</label>
+                    <input class="form-control" type="number" id="log-reps" min="1" max="500" value="10">
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Save exercise</button>
+                <span id="log-form-msg" class="msg-line"></span>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <!-- View 3: Workout plans -->
+        <section id="view-plans" class="view-panel">
+          <div style="margin-bottom: 24px;">
+            <h2 class="brand-title" style="font-size: 18px; margin-bottom: 4px;">Workout plans</h2>
+            <p class="brand-subtitle">Saved routines and target workouts</p>
+          </div>
+
+          <div class="plans-grid" id="plans-container">
+            <!-- Plans populated by JS -->
+          </div>
+
+          <div class="dashboard-grid">
+            <!-- Create plan card -->
+            <div class="card form-card">
+              <h3 class="brand-title" style="font-size: 15px; margin-bottom: 4px;">Create plan</h3>
+              <p class="brand-subtitle" style="margin-bottom: 16px;">Add a new workout routine</p>
+
+              <form id="create-plan-form">
+                <div class="form-group">
+                  <label class="form-label" for="new-plan-name">Plan name</label>
+                  <input class="form-control" type="text" id="new-plan-name" placeholder="e.g. Upper body focus" required>
+                </div>
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-primary">Create plan</button>
+                  <span id="create-plan-msg" class="msg-line"></span>
+                </div>
+              </form>
+            </div>
+
+            <!-- Add exercise to plan card -->
+            <div class="card form-card">
+              <h3 class="brand-title" style="font-size: 15px; margin-bottom: 4px;">Add exercise to plan</h3>
+              <p class="brand-subtitle" style="margin-bottom: 16px;">Extend an existing routine</p>
+
+              <form id="add-to-plan-form">
+                <div class="form-group">
+                  <label class="form-label" for="plan-select">Target plan</label>
+                  <select class="form-control" id="plan-select" required>
+                    <option value="">Select a plan</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="plan-ex-type">Exercise type</label>
+                  <select class="form-control" id="plan-ex-type">
+                    <option value="cardio">Cardio</option>
+                    <option value="strength">Strength</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="plan-ex-name">Exercise name</label>
+                  <input class="form-control" type="text" id="plan-ex-name" placeholder="e.g. Pull ups" required>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="plan-ex-duration">Duration (minutes)</label>
+                  <input class="form-control" type="number" id="plan-ex-duration" min="1" value="15" required>
+                </div>
+
+                <div id="plan-cardio-fields">
+                  <div class="form-group">
+                    <label class="form-label" for="plan-ex-met">MET</label>
+                    <input class="form-control" type="number" id="plan-ex-met" step="0.1" min="0.5" value="6.0">
+                  </div>
+                </div>
+
+                <div id="plan-strength-fields" style="display: none;">
+                  <div class="form-grid-2">
+                    <div class="form-group">
+                      <label class="form-label" for="plan-ex-sets">Sets</label>
+                      <input class="form-control" type="number" id="plan-ex-sets" min="1" value="3">
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="plan-ex-reps">Reps</label>
+                      <input class="form-control" type="number" id="plan-ex-reps" min="1" value="10">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-primary">Add to plan</button>
+                  <span id="add-plan-msg" class="msg-line"></span>
+                </div>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <!-- View 4: History -->
+        <section id="view-history" class="view-panel">
+          <div style="margin-bottom: 24px;">
+            <h2 class="brand-title" style="font-size: 18px; margin-bottom: 4px;">Workout history</h2>
+            <p class="brand-subtitle">All logged activities from newest to oldest</p>
+          </div>
+
+          <div class="table-card">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Exercise</th>
+                  <th>Type</th>
+                  <th>Duration</th>
+                  <th>Calories</th>
+                </tr>
+              </thead>
+              <tbody id="history-table-body">
+                <!-- Rows populated by JS -->
+              </tbody>
+            </table>
+          </div>
+          <div id="history-empty" class="empty-state" style="display: none; margin-top: 16px;">
+            No workout history recorded yet. Complete an exercise to start your history.
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
