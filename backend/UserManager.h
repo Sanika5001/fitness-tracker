@@ -115,7 +115,9 @@ public:
         auto it = users.find(username);
         if (it == users.end()) return false;
 
-        ex->calculateCalories(it->second.getWeightKg());
+        if (ex->getCalories() <= 0.0) {
+            ex->calculateCalories(it->second.getWeightKg());
+        }
         if (ex->getDate().empty()) {
             ex->setDate(DateHelper::getFormattedDate(0));
         }
@@ -123,6 +125,27 @@ public:
         it->second.logExercise(ex);
         Storage::saveUser(it->second);
         outEx = ex;
+        return true;
+    }
+
+    bool updateProfile(const std::string& username, double weight, double dailyGoal, std::string& errorMsg) {
+        if (weight < 20.0 || weight > 300.0) {
+            errorMsg = "Weight must be between 20 and 300 kg.";
+            return false;
+        }
+        if (dailyGoal < 50.0 || dailyGoal > 10000.0) {
+            errorMsg = "Daily goal must be between 50 and 10000 kcal.";
+            return false;
+        }
+        std::lock_guard<std::mutex> lock(mtx);
+        auto it = users.find(username);
+        if (it == users.end()) {
+            errorMsg = "User not found.";
+            return false;
+        }
+        it->second.setWeightKg(weight);
+        it->second.setDailyGoal(dailyGoal);
+        Storage::saveUser(it->second);
         return true;
     }
 
@@ -162,7 +185,9 @@ public:
             return false;
         }
 
-        ex->calculateCalories(it->second.getWeightKg());
+        if (ex->getCalories() <= 0.0) {
+            ex->calculateCalories(it->second.getWeightKg());
+        }
         plan->addExercise(ex);
         Storage::saveUser(it->second);
         outPlan = *plan;

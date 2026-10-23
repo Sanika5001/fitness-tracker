@@ -12,6 +12,7 @@
 #include "User.h"
 #include "UserManager.h"
 #include "Session.h"
+#include "Seed.h"
 
 static std::string urlDecode(const std::string& in) {
     std::string out;
@@ -58,6 +59,7 @@ static bool authUser(const httplib::Request& req, httplib::Response& res,
 int main() {
     httplib::Server svr;
     UserManager userMgr;
+    seedDemo(userMgr);
     Session session;
 
     svr.Get("/", [](const httplib::Request&, httplib::Response& res) {
@@ -130,6 +132,40 @@ int main() {
         } else {
             res.status = 404;
             res.set_content(R"({"error":"User not found"})", "application/json");
+        }
+    });
+
+    svr.Put("/api/me", [&](const httplib::Request& req, httplib::Response& res) {
+        std::string username;
+        if (!authUser(req, res, session, username)) return;
+
+        try {
+            auto body = nlohmann::json::parse(req.body);
+            User u;
+            if (!userMgr.getUser(username, u)) {
+                res.status = 404;
+                res.set_content(R"({"error":"User not found"})", "application/json");
+                return;
+            }
+
+            double weight = body.value("weight", u.getWeightKg());
+            double dailyGoal = body.value("dailyGoal", u.getDailyGoal());
+
+            std::string errMsg;
+            if (userMgr.updateProfile(username, weight, dailyGoal, errMsg)) {
+                res.status = 200;
+                res.set_content(nlohmann::json{
+                    {"username", username},
+                    {"weight", weight},
+                    {"dailyGoal", dailyGoal}
+                }.dump(), "application/json");
+            } else {
+                res.status = 400;
+                res.set_content(nlohmann::json{{"error", errMsg}}.dump(), "application/json");
+            }
+        } catch (const std::exception&) {
+            res.status = 400;
+            res.set_content(R"({"error":"Invalid JSON payload"})", "application/json");
         }
     });
 
