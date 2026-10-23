@@ -21,7 +21,7 @@
       <button class="nav-item" data-view="plans">Workout plans</button>
       <button class="nav-item" data-view="history">History</button>
       <button class="nav-item" data-view="profile">Profile</button>
-      <div style="border-top: 1px solid var(--border); padding-top: 10px; margin-top: 6px;">
+      <div style="border-top: 1px solid var(--line); padding-top: 10px; margin-top: 6px;">
         <div class="user-profile">
           <div class="avatar-circle" id="mobile-user-initials">U</div>
           <div class="user-meta">
@@ -33,7 +33,7 @@
       </div>
     </nav>
 
-    <!-- Left sidebar (170px wide, desktop) -->
+    <!-- Left sidebar (170px wide, white, full height, 1px right border) -->
     <aside class="sidebar">
       <div class="sidebar-header">
         <span class="sidebar-brand">FitTrack</span>
@@ -62,11 +62,13 @@
     <!-- Main area -->
     <main class="main-area">
       <header class="main-header">
-        <div>
-          <h1 class="header-greeting" id="greeting-text">Good morning, User</h1>
-          <div class="header-date" id="today-date-text">Today</div>
+        <div class="header-titles">
+          <h1 class="page-title" id="header-main-title">Good afternoon, User</h1>
+          <span class="page-subtitle" id="header-sub-title">Today</span>
         </div>
-        <button class="btn btn-primary btn-header-log" id="header-log-btn">Log exercise</button>
+        <div class="header-btn-wrap" id="header-btn-wrap">
+          <button class="btn btn-primary" id="header-action-btn">Log exercise</button>
+        </div>
       </header>
 
       <div class="view-container">
@@ -74,44 +76,44 @@
         <section id="view-dashboard" class="view-panel active">
           <!-- Row of 3 summary cards -->
           <div class="summary-cards-row">
-            <div class="summary-card card-cal">
-              <span class="sc-label">Calories today</span>
+            <div class="sc-card">
+              <span class="sc-lbl">Calories today</span>
               <span class="sc-val" id="card-calories">0 kcal</span>
             </div>
-            <div class="summary-card card-time">
-              <span class="sc-label">Active time</span>
+            <div class="sc-card">
+              <span class="sc-lbl">Active time</span>
               <span class="sc-val" id="card-minutes">0 min</span>
             </div>
-            <div class="summary-card card-streak">
-              <span class="sc-label">Streak</span>
+            <div class="sc-card">
+              <span class="sc-lbl">Streak</span>
               <span class="sc-val" id="card-streak">0 days</span>
             </div>
           </div>
 
-          <!-- Bottom Row: This week card and Today card -->
-          <div class="dashboard-bottom-row">
-            <!-- This week card on --teal-50 -->
-            <div class="card-week">
-              <div class="card-week-header">
-                <span class="card-week-title">This week</span>
-                <span class="card-week-subtitle">Calories burned</span>
+          <!-- Unequal Split Row: 62% This week, 38% Today -->
+          <div class="dashboard-split-row">
+            <!-- "This week" card on --teal-150 -->
+            <div class="card-week-box">
+              <div class="card-hdr-flex">
+                <span class="card-title-900">This week</span>
+                <span class="card-sub-600">Calories burned</span>
               </div>
-              <div class="chart-flex" id="week-chart">
-                <!-- 7 vertical bars Mon to Sun populated by JS -->
+              <div class="chart-full-height" id="week-chart">
+                <!-- 7 large vertical bars Mon to Sun populated by JS -->
               </div>
             </div>
 
-            <!-- Today card on --teal-100 -->
-            <div class="card-today">
-              <div class="card-today-header">
-                <span class="card-today-title">Today</span>
-                <span class="card-today-goal-text" id="goal-progress-text">0 of 500 kcal goal</span>
+            <!-- "Today" card on --teal-200 -->
+            <div class="card-today-box">
+              <div>
+                <span class="card-title-900">Today</span>
+                <div class="card-sub-600" id="goal-progress-text" style="margin-top: 2px;">0 of 500 kcal goal</div>
               </div>
-              <div class="progress-track-6px">
-                <div class="progress-fill-6px" id="goal-progress-bar" style="--progress-width: 0%;"></div>
+              <div class="progress-track-today">
+                <div class="progress-fill-today" id="goal-progress-bar" style="--progress-width: 0%;"></div>
               </div>
-              <div class="today-scroll-list" id="today-exercise-list">
-                <!-- Inner scrollable exercise rows populated by JS -->
+              <div class="today-rows-scroll" id="today-exercise-list">
+                <!-- Full width --teal-50 rows populated by JS -->
               </div>
             </div>
           </div>
@@ -119,196 +121,168 @@
 
         <!-- View 2: Log exercise -->
         <section id="view-log" class="view-panel">
-          <div class="other-view-scroll">
-            <div class="content-card" style="max-width: 520px;">
-              <h2 class="brand-title" style="margin-bottom: 2px;">Log exercise</h2>
-              <p class="brand-subtitle">Record your completed activity</p>
+          <div class="view-scroll-content">
+            <div class="log-split-grid">
+              <!-- Left: Wide form card on --teal-150 -->
+              <div class="card-teal-150">
+                <h2 class="card-title-900" style="margin-bottom: 12px;">New entry</h2>
+                <form id="log-exercise-form">
+                  <!-- Segmented Control Cardio / Strength -->
+                  <div class="segmented-control">
+                    <button type="button" class="segment-btn active" data-type="cardio" id="seg-cardio">Cardio</button>
+                    <button type="button" class="segment-btn" data-type="strength" id="seg-strength">Strength</button>
+                  </div>
+                  <input type="hidden" id="log-type" value="cardio">
 
-              <form id="log-exercise-form">
-                <div class="form-group">
-                  <label class="form-label" for="log-type">Exercise type</label>
-                  <select class="form-control" id="log-type">
-                    <option value="cardio">Cardio</option>
-                    <option value="strength">Strength</option>
-                  </select>
-                </div>
-
-                <div class="form-group">
-                  <label class="form-label" for="log-name">Exercise name</label>
-                  <input class="form-control" type="text" id="log-name" placeholder="e.g. Running, Bench press" required>
-                </div>
-
-                <div class="form-group">
-                  <label class="form-label" for="log-duration">Duration (minutes)</label>
-                  <input class="form-control" type="number" id="log-duration" min="1" max="1440" value="30" required>
-                </div>
-
-                <div id="cardio-fields">
                   <div class="form-group">
-                    <label class="form-label" for="log-met">MET</label>
-                    <input class="form-control" type="number" id="log-met" step="0.1" min="0.5" max="30" value="6.0">
-                    <span style="font-size: 11px; color: var(--muted-text); margin-top: 3px; display: block;">Walking 3.0, Cycling 7.0, Running 9.8</span>
+                    <label class="form-label" for="log-name">Exercise name</label>
+                    <input class="form-control" type="text" id="log-name" placeholder="e.g. Running, Bench press" required>
                   </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="log-duration">Duration (minutes)</label>
+                    <input class="form-control" type="number" id="log-duration" min="1" max="1440" value="30" required>
+                  </div>
+
+                  <div id="cardio-fields">
+                    <div class="form-group">
+                      <label class="form-label" for="log-met">MET (metabolic equivalent)</label>
+                      <input class="form-control" type="number" id="log-met" step="0.1" min="0.5" max="30" value="7.0">
+                      <span class="form-hint">Walking 3.0, Cycling 7.0, Running 9.8</span>
+                    </div>
+                  </div>
+
+                  <div id="strength-fields" style="display: none;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                      <div class="form-group">
+                        <label class="form-label" for="log-sets">Sets</label>
+                        <input class="form-control" type="number" id="log-sets" min="1" max="100" value="3">
+                      </div>
+                      <div class="form-group">
+                        <label class="form-label" for="log-reps">Reps</label>
+                        <input class="form-control" type="number" id="log-reps" min="1" max="500" value="10">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="log-date">Date</label>
+                    <input class="form-control" type="date" id="log-date">
+                  </div>
+
+                  <div style="margin-top: 14px;">
+                    <button type="submit" class="btn btn-primary btn-full">Save exercise</button>
+                  </div>
+                  <div id="log-form-msg" class="msg-line" style="margin-top: 8px;"></div>
+                </form>
+              </div>
+
+              <!-- Right: Side cards (Estimated burn & Recent) -->
+              <div style="display: flex; flex-direction: column; gap: 12px;">
+                <!-- Estimated burn card on --teal-600 -->
+                <div class="card-teal-600">
+                  <span style="font-size: 12px; color: var(--teal-50);">Estimated burn</span>
+                  <div>
+                    <span class="est-burn-number" id="est-burn-val">245</span>
+                    <span style="font-size: 14px; color: var(--teal-50); margin-left: 2px;">kcal</span>
+                  </div>
+                  <span style="font-size: 11px; color: var(--teal-50);" id="est-burn-calc">Based on your weight (68 kg)</span>
                 </div>
 
-                <div id="strength-fields" style="display: none;">
-                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                    <div class="form-group">
-                      <label class="form-label" for="log-sets">Sets</label>
-                      <input class="form-control" type="number" id="log-sets" min="1" max="100" value="3">
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label" for="log-reps">Reps</label>
-                      <input class="form-control" type="number" id="log-reps" min="1" max="500" value="10">
-                    </div>
+                <!-- Recent card on --teal-200 -->
+                <div class="card-teal-200">
+                  <span class="card-title-900" style="display: block; margin-bottom: 8px;">Recent</span>
+                  <div id="recent-exercises-list" style="display: flex; flex-direction: column; gap: 6px;">
+                    <!-- Last 3 entries as --teal-50 rows -->
                   </div>
                 </div>
-
-                <div style="display: flex; align-items: center; gap: 12px; margin-top: 16px;">
-                  <button type="submit" class="btn btn-primary">Save exercise</button>
-                  <span id="log-form-msg" class="msg-line"></span>
-                </div>
-              </form>
+              </div>
             </div>
           </div>
         </section>
 
         <!-- View 3: Workout plans -->
         <section id="view-plans" class="view-panel">
-          <div class="other-view-scroll">
-            <div style="margin-bottom: 16px;">
-              <h2 class="brand-title" style="margin-bottom: 2px;">Workout plans</h2>
-              <p class="brand-subtitle">Saved routines and target workouts</p>
+          <div class="view-scroll-content">
+            <!-- New plan collapsible card on --teal-200 -->
+            <div id="new-plan-box" class="card-teal-200" style="display: none; margin-bottom: 14px;">
+              <span class="card-title-900" style="display: block; margin-bottom: 8px;">Create new plan</span>
+              <form id="create-plan-form" style="display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 200px;">
+                  <label class="form-label" for="new-plan-name">Plan name</label>
+                  <input class="form-control" type="text" id="new-plan-name" placeholder="e.g. Morning cardio" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Create plan</button>
+              </form>
+              <div id="create-plan-msg" class="msg-line" style="margin-top: 6px;"></div>
             </div>
 
-            <div class="plans-grid" id="plans-container">
-              <!-- Plans populated by JS -->
+            <!-- Plan cards grid -->
+            <div class="plans-3col-grid" id="plans-container">
+              <!-- Cards shaded by position 1st --teal-800, 2nd --teal-600, 3rd --teal-300 -->
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
-              <!-- Create plan card -->
-              <div class="content-card">
-                <h3 class="brand-title" style="font-size: 14px; margin-bottom: 2px;">Create plan</h3>
-                <p class="brand-subtitle" style="margin-bottom: 14px;">Add a new workout routine</p>
-
-                <form id="create-plan-form">
-                  <div class="form-group">
-                    <label class="form-label" for="new-plan-name">Plan name</label>
-                    <input class="form-control" type="text" id="new-plan-name" placeholder="e.g. Upper body focus" required>
-                  </div>
-                  <div style="display: flex; align-items: center; gap: 12px; margin-top: 12px;">
-                    <button type="submit" class="btn btn-primary">Create plan</button>
-                    <span id="create-plan-msg" class="msg-line"></span>
-                  </div>
-                </form>
-              </div>
-
-              <!-- Add exercise to plan card -->
-              <div class="content-card">
-                <h3 class="brand-title" style="font-size: 14px; margin-bottom: 2px;">Add exercise to plan</h3>
-                <p class="brand-subtitle" style="margin-bottom: 14px;">Extend an existing routine</p>
-
-                <form id="add-to-plan-form">
-                  <div class="form-group">
-                    <label class="form-label" for="plan-select">Target plan</label>
+            <!-- "Add exercise to a plan" card on --teal-200 -->
+            <div class="card-teal-200" style="margin-top: 8px;">
+              <span class="card-title-900" style="display: block; margin-bottom: 10px;">Add exercise to a plan</span>
+              <form id="add-to-plan-form">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px;">
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="plan-select">Plan</label>
                     <select class="form-control" id="plan-select" required>
                       <option value="">Select a plan</option>
                     </select>
                   </div>
 
-                  <div class="form-group">
-                    <label class="form-label" for="plan-ex-type">Exercise type</label>
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="plan-ex-type">Type</label>
                     <select class="form-control" id="plan-ex-type">
                       <option value="cardio">Cardio</option>
                       <option value="strength">Strength</option>
                     </select>
                   </div>
 
-                  <div class="form-group">
-                    <label class="form-label" for="plan-ex-name">Exercise name</label>
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="plan-ex-name">Name</label>
                     <input class="form-control" type="text" id="plan-ex-name" placeholder="e.g. Pull ups" required>
                   </div>
 
-                  <div class="form-group">
-                    <label class="form-label" for="plan-ex-duration">Duration (minutes)</label>
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="plan-ex-duration">Minutes</label>
                     <input class="form-control" type="number" id="plan-ex-duration" min="1" value="15" required>
                   </div>
+                </div>
 
-                  <div id="plan-cardio-fields">
-                    <div class="form-group">
-                      <label class="form-label" for="plan-ex-met">MET</label>
-                      <input class="form-control" type="number" id="plan-ex-met" step="0.1" min="0.5" value="6.0">
-                    </div>
-                  </div>
-
-                  <div id="plan-strength-fields" style="display: none;">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                      <div class="form-group">
-                        <label class="form-label" for="plan-ex-sets">Sets</label>
-                        <input class="form-control" type="number" id="plan-ex-sets" min="1" value="3">
-                      </div>
-                      <div class="form-group">
-                        <label class="form-label" for="plan-ex-reps">Reps</label>
-                        <input class="form-control" type="number" id="plan-ex-reps" min="1" value="10">
-                      </div>
-                    </div>
-                  </div>
-
-                  <div style="display: flex; align-items: center; gap: 12px; margin-top: 12px;">
-                    <button type="submit" class="btn btn-primary">Add to plan</button>
-                    <span id="add-plan-msg" class="msg-line"></span>
-                  </div>
-                </form>
-              </div>
+                <div style="display: flex; align-items: center; gap: 12px; margin-top: 12px;">
+                  <button type="submit" class="btn btn-primary">Add</button>
+                  <span id="add-plan-msg" class="msg-line"></span>
+                </div>
+              </form>
             </div>
           </div>
         </section>
 
         <!-- View 4: History -->
         <section id="view-history" class="view-panel">
-          <div class="other-view-scroll">
-            <div style="margin-bottom: 16px;">
-              <h2 class="brand-title" style="margin-bottom: 2px;">Workout history</h2>
-              <p class="brand-subtitle">All logged activities from newest to oldest</p>
-            </div>
-
-            <div class="content-card" style="padding: 0; overflow: hidden;">
-              <table class="history-table">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Exercise</th>
-                    <th>Type</th>
-                    <th>Duration</th>
-                    <th>Calories</th>
-                  </tr>
-                </thead>
-                <tbody id="history-table-body">
-                  <!-- Rows populated by JS -->
-                </tbody>
-              </table>
-            </div>
-            <div id="history-empty" class="empty-state" style="display: none;">
-              No workout history recorded yet. Complete an exercise to start your history.
-            </div>
+          <div class="view-scroll-content" id="history-groups-wrap">
+            <!-- Grouped by date: each day is a --teal-150 card containing --teal-50 rows -->
+          </div>
+          <div id="history-empty" class="card-teal-200 empty-state-pale" style="display: none; margin-top: 12px;">
+            No workout history recorded yet. Complete an exercise to start your history.
           </div>
         </section>
 
         <!-- View 5: Profile -->
         <section id="view-profile" class="view-panel">
-          <div class="other-view-scroll">
-            <div style="margin-bottom: 16px;">
-              <h2 class="brand-title" style="margin-bottom: 2px;">Profile & settings</h2>
-              <p class="brand-subtitle">Manage your personal metrics and daily calorie goal</p>
-            </div>
-
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
-              <div class="content-card">
-                <h3 class="brand-title" style="font-size: 14px; margin-bottom: 14px;">Personal settings</h3>
+          <div class="view-scroll-content">
+            <div class="profile-grid-cards">
+              <!-- Card 1 on --teal-150: editable fields -->
+              <div class="card-teal-150">
+                <span class="card-title-900" style="display: block; margin-bottom: 12px;">Personal settings</span>
                 <form id="profile-form">
                   <div class="form-group">
                     <label class="form-label" for="profile-username">Username</label>
-                    <input class="form-control" type="text" id="profile-username" disabled style="background-color: var(--teal-50); color: var(--teal-900);">
+                    <input class="form-control" type="text" id="profile-username" disabled style="color: var(--teal-900); opacity: 0.9;">
                   </div>
 
                   <div class="form-group">
@@ -321,31 +295,28 @@
                     <input class="form-control" type="number" id="profile-goal" min="100" max="10000" step="50" required>
                   </div>
 
-                  <div style="display: flex; align-items: center; gap: 12px; margin-top: 16px;">
+                  <div style="margin-top: 14px;">
                     <button type="submit" class="btn btn-primary">Save changes</button>
-                    <span id="profile-msg" class="msg-line"></span>
                   </div>
+                  <div id="profile-msg" class="msg-line" style="margin-top: 6px;"></div>
                 </form>
               </div>
 
-              <div class="content-card" style="background-color: var(--teal-50); border: none;">
-                <h3 class="brand-title" style="font-size: 14px; margin-bottom: 10px; color: var(--teal-800);">Account summary</h3>
-                <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
-                  <div style="display: flex; justify-content: space-between;">
-                    <span style="color: var(--muted-text);">Account</span>
-                    <strong id="profile-stat-user">--</strong>
+              <!-- Card 2 on --teal-200: totals using --teal-50 stat boxes -->
+              <div class="card-teal-200">
+                <span class="card-title-900" style="display: block; margin-bottom: 10px;">Lifetime totals</span>
+                <div class="stats-3col">
+                  <div class="stat-pale-box">
+                    <div class="stat-box-num" id="stat-total-workouts">0</div>
+                    <div class="stat-box-lbl">Workouts</div>
                   </div>
-                  <div style="display: flex; justify-content: space-between;">
-                    <span style="color: var(--muted-text);">Current weight</span>
-                    <strong id="profile-stat-weight">-- kg</strong>
+                  <div class="stat-pale-box">
+                    <div class="stat-box-num" id="stat-total-mins">0</div>
+                    <div class="stat-box-lbl">Minutes</div>
                   </div>
-                  <div style="display: flex; justify-content: space-between;">
-                    <span style="color: var(--muted-text);">Daily goal</span>
-                    <strong id="profile-stat-goal">-- kcal</strong>
-                  </div>
-                  <div style="display: flex; justify-content: space-between;">
-                    <span style="color: var(--muted-text);">Active streak</span>
-                    <strong id="profile-stat-streak">-- days</strong>
+                  <div class="stat-pale-box">
+                    <div class="stat-box-num" id="stat-total-kcal">0</div>
+                    <div class="stat-box-lbl">Calories</div>
                   </div>
                 </div>
               </div>

@@ -1,16 +1,20 @@
-:root {
-  --teal-900: #04342C;   /* dark text, primary button */
-  --teal-800: #085041;   /* Calories card, today's bar, progress bar */
-  --teal-600: #0F6E56;   /* Active time card, avatar, focus outline */
-  --teal-400: #1D9E75;   /* dashed outlines */
-  --teal-200: #5DCAA5;   /* Streak card, past bars */
-  --teal-100: #9FE1CB;   /* Today card, active nav item */
-  --teal-50:  #E1F5EE;   /* This week card, progress track */
+/* ==========================================================================
+   FitTrack - Modern Teal Theme (Strictly Approved Design)
+   ========================================================================== */
 
-  --bg-page: #FFFFFF;
-  --border: #E5E7EB;
-  --muted-text: #6B7280;
-  --body-text: #1F2937;
+:root {
+  --page: #F4FAF8;        /* main background, pale mint */
+  --white: #FFFFFF;       /* sidebar, mobile topbar/drawer, auth card */
+  --line: #CFE8DF;        /* borders and dividers, 1px */
+  --teal-900: #04342C;    /* main text on light, primary text on pale cards */
+  --teal-800: #085041;    /* dark cards, primary buttons, today's bar, progress bar */
+  --teal-600: #0F6E56;    /* mid dark cards, avatar */
+  --teal-500: #1D9E75;    /* inner rows on dark cards, dashed outlines */
+  --teal-300: #5DCAA5;    /* Streak card, past bars */
+  --teal-200: #9FE1CB;    /* Today card, active nav item, Recent card */
+  --teal-150: #CDEEDF;    /* This week card, New entry form card */
+  --teal-50:  #E1F5EE;    /* inputs, list rows on pale cards, progress track */
+  --muted: #3F6F61;       /* secondary text */
   --error: #A32D2D;
 
   --font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -24,44 +28,31 @@
 
 body {
   font-family: var(--font);
-  background-color: var(--bg-page);
-  color: var(--body-text);
+  background-color: var(--page);
+  color: var(--teal-900);
   line-height: 1.4;
   font-size: 13px;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Animations */
+b, strong {
+  font-weight: 500;
+}
+
+/* --------------------------------------------------------------------------
+   Animations (CSS only, wrapped in prefers-reduced-motion)
+   -------------------------------------------------------------------------- */
 @keyframes barGrow {
-  from {
-    transform: scaleY(0);
-  }
-  to {
-    transform: scaleY(1);
-  }
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
 }
 
 @keyframes fillProgress {
-  from {
-    width: 0%;
-  }
-  to {
-    width: var(--progress-width, 0%);
-  }
+  from { width: 0%; }
+  to { width: var(--progress-width, 0%); }
 }
 
-@keyframes rowRise {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes cardFadeIn {
+@keyframes riseFade {
   from {
     opacity: 0;
     transform: translateY(8px);
@@ -72,6 +63,11 @@ body {
   }
 }
 
+@keyframes numPop {
+  0% { transform: scale(0.88); }
+  100% { transform: scale(1); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.001s !important;
@@ -80,7 +76,9 @@ body {
   }
 }
 
-/* Scrollbars */
+/* --------------------------------------------------------------------------
+   Scrollbars
+   -------------------------------------------------------------------------- */
 ::-webkit-scrollbar {
   width: 4px;
   height: 4px;
@@ -89,63 +87,27 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--teal-400);
+  background: var(--teal-500);
   border-radius: 2px;
 }
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--teal-400) transparent;
+  scrollbar-color: var(--teal-500) transparent;
 }
 
-/* Buttons */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 16px;
-  font-size: 13px;
-  font-weight: 500;
-  font-family: var(--font);
-  border-radius: 8px;
-  border: 1px solid transparent;
-  cursor: pointer;
-  text-decoration: none;
-  transition: background-color 0.15s ease, border-color 0.15s ease;
-}
-
-.btn-primary {
-  background-color: var(--teal-900);
-  color: #FFFFFF;
-}
-
-.btn-primary:hover {
-  background-color: #03251f;
-}
-
-.btn-secondary {
-  background-color: #FFFFFF;
-  border-color: var(--border);
-  color: var(--body-text);
-}
-
-.btn-secondary:hover {
-  background-color: var(--teal-50);
-}
-
-.btn-full {
-  width: 100%;
-}
-
+/* --------------------------------------------------------------------------
+   Base Typography & Form Controls
+   -------------------------------------------------------------------------- */
 .form-group {
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 .form-label {
   display: block;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
-  color: var(--body-text);
-  margin-bottom: 6px;
+  color: var(--teal-900);
+  margin-bottom: 4px;
 }
 
 .form-control {
@@ -153,11 +115,13 @@ body {
   padding: 8px 12px;
   font-size: 13px;
   font-family: var(--font);
-  color: var(--body-text);
-  background-color: #FFFFFF;
-  border: 1px solid var(--border);
+  font-weight: 400;
+  color: var(--teal-900);
+  background-color: var(--teal-50);
+  border: 1px solid var(--line);
   border-radius: 8px;
   outline: none;
+  box-sizing: border-box;
 }
 
 .form-control:focus {
@@ -165,10 +129,82 @@ body {
   outline: 1px solid var(--teal-600);
 }
 
+.form-hint {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 3px;
+  display: block;
+}
+
+/* --------------------------------------------------------------------------
+   Buttons
+   -------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-family: var(--font);
+  font-weight: 500;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 150ms ease;
+}
+
+.btn-primary {
+  background-color: var(--teal-800);
+  color: #FFFFFF;
+}
+
+.btn-primary:hover {
+  opacity: 0.92;
+}
+
+.btn-full {
+  width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   Segmented Control
+   -------------------------------------------------------------------------- */
+.segmented-control {
+  display: flex;
+  background-color: var(--teal-50);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 3px;
+  gap: 3px;
+  margin-bottom: 12px;
+}
+
+.segment-btn {
+  flex: 1;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-family: var(--font);
+  font-weight: 500;
+  color: var(--teal-900);
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.segment-btn.active {
+  background-color: var(--teal-800);
+  color: #FFFFFF;
+}
+
+/* --------------------------------------------------------------------------
+   Messages & Demo Box
+   -------------------------------------------------------------------------- */
 .msg-line {
   font-size: 12px;
-  min-height: 18px;
-  line-height: 18px;
+  min-height: 16px;
 }
 
 .msg-error {
@@ -177,9 +213,23 @@ body {
 
 .msg-success {
   color: var(--teal-800);
+  font-weight: 500;
 }
 
-/* Auth Layout */
+.demo-box {
+  margin-top: 14px;
+  padding: 10px 12px;
+  background-color: var(--teal-50);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 12px;
+  color: var(--teal-900);
+  text-align: center;
+}
+
+/* --------------------------------------------------------------------------
+   Auth Layout (Login / Register)
+   -------------------------------------------------------------------------- */
 .auth-wrapper {
   display: flex;
   min-height: 100vh;
@@ -187,41 +237,41 @@ body {
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background-color: var(--bg-page);
+  background-color: var(--page);
 }
 
 .auth-card {
-  background-color: #FFFFFF;
-  border: 1px solid var(--border);
+  background-color: var(--teal-150);
+  border: 1px solid var(--line);
   border-radius: 12px;
   width: 100%;
-  max-width: 360px;
+  max-width: 380px;
   padding: 28px 24px;
-  animation: cardFadeIn 0.3s ease-out forwards;
+  animation: riseFade 0.3s ease-out forwards;
 }
 
-.brand-title {
+.auth-brand {
   font-size: 18px;
   font-weight: 500;
   color: var(--teal-900);
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
-.brand-subtitle {
-  color: var(--muted-text);
+.auth-sub {
+  color: var(--muted);
   font-size: 13px;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 .auth-footer {
-  margin-top: 18px;
+  margin-top: 16px;
   text-align: center;
   font-size: 13px;
-  color: var(--muted-text);
+  color: var(--muted);
 }
 
 .auth-footer a {
-  color: var(--teal-600);
+  color: var(--teal-800);
   text-decoration: none;
   font-weight: 500;
 }
@@ -230,167 +280,51 @@ body {
   text-decoration: underline;
 }
 
-.demo-hint {
-  margin-top: 14px;
-  padding: 8px 10px;
-  background-color: var(--teal-50);
-  border-radius: 8px;
-  font-size: 12px;
-  color: var(--teal-800);
-  text-align: center;
+/* --------------------------------------------------------------------------
+   Sidebar (170px, white, full height, 1px right border)
+   -------------------------------------------------------------------------- */
+.sidebar {
+  width: 170px;
+  height: 100%;
+  background-color: var(--white);
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
 }
 
-/* Laptop One-Window-Fit layout (>= 1000px) */
-@media (min-width: 1000px) {
-  html, body {
-    height: 100%;
-    margin: 0;
-    overflow: hidden;
-  }
-
-  .app-root {
-    display: grid;
-    grid-template-columns: 170px 1fr;
-    height: 100vh;
-    height: 100dvh;
-    overflow: hidden;
-  }
-
-  .sidebar {
-    width: 170px;
-    height: 100%;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    border-right: 1px solid var(--border);
-    background-color: var(--bg-page);
-  }
-
-  .main-area {
-    display: grid;
-    grid-template-rows: auto 1fr;
-    height: 100%;
-    min-height: 0;
-    overflow: hidden;
-  }
-
-  .main-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 14px 24px;
-    border-bottom: 1px solid var(--border);
-    background-color: var(--bg-page);
-  }
-
-  .view-container {
-    height: 100%;
-    min-height: 0;
-    overflow: hidden;
-    padding: 14px 24px;
-  }
-
-  .view-panel {
-    display: none;
-    height: 100%;
-    min-height: 0;
-  }
-
-  .view-panel.active {
-    display: flex;
-    flex-direction: column;
-  }
-
-  #view-dashboard.active {
-    display: grid;
-    grid-template-rows: auto 1fr;
-    gap: 12px;
-    height: 100%;
-    min-height: 0;
-  }
-
-  .summary-cards-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-  }
-
-  .dashboard-bottom-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    height: 100%;
-    min-height: 0;
-  }
-
-  .card-week, .card-today {
-    height: 100%;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
-    padding: 14px;
-    box-sizing: border-box;
-  }
-
-  .card-today .today-scroll-list {
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
-  }
-
-  .card-week .chart-flex {
-    flex: 1;
-    min-height: 0;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 8px;
-    padding-top: 10px;
-  }
-
-  .other-view-scroll {
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
-  }
-
-  .mobile-topbar, .mobile-menu-drawer {
-    display: none !important;
-  }
-}
-
-/* Sidebar Elements */
 .sidebar-header {
-  padding: 18px 16px 12px;
+  padding: 18px 14px 14px;
 }
 
 .sidebar-brand {
   font-size: 18px;
   font-weight: 500;
   color: var(--teal-900);
+  letter-spacing: -0.2px;
 }
 
 .sidebar-nav {
   display: flex;
   flex-direction: column;
-  padding: 4px 8px;
-  gap: 2px;
+  gap: 4px;
+  padding: 0 10px;
 }
 
 .nav-item {
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 8px 12px;
+  padding: 8px 10px;
   border: none;
   background: transparent;
   border-radius: 8px;
   font-size: 13px;
   font-weight: 400;
-  color: var(--body-text);
+  color: var(--teal-900);
   cursor: pointer;
   text-align: left;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  transition: background-color 150ms ease, color 150ms ease;
 }
 
 .nav-item:hover {
@@ -398,22 +332,22 @@ body {
 }
 
 .nav-item.active {
-  background-color: var(--teal-100);
+  background-color: var(--teal-200);
   color: var(--teal-900);
   font-weight: 500;
 }
 
 .sidebar-footer {
   margin-top: auto;
-  padding: 14px 14px;
-  border-top: 1px solid var(--border);
+  padding: 12px 14px;
+  border-top: 1px solid var(--line);
 }
 
 .user-profile {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 8px;
+  gap: 8px;
+  margin-bottom: 6px;
 }
 
 .avatar-circle {
@@ -437,15 +371,15 @@ body {
 .user-name {
   font-size: 13px;
   font-weight: 500;
-  color: var(--body-text);
+  color: var(--teal-900);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .user-weight {
-  font-size: 12px;
-  color: var(--muted-text);
+  font-size: 11px;
+  color: var(--muted);
 }
 
 .btn-logout-text {
@@ -453,7 +387,7 @@ body {
   border: none;
   padding: 2px 0;
   font-size: 12px;
-  color: var(--muted-text);
+  color: var(--muted);
   cursor: pointer;
   text-align: left;
 }
@@ -463,62 +397,82 @@ body {
   text-decoration: underline;
 }
 
-/* Header */
-.header-greeting {
-  font-size: 18px;
-  font-weight: 500;
-  color: var(--body-text);
+/* --------------------------------------------------------------------------
+   Main Header
+   -------------------------------------------------------------------------- */
+.main-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--line);
+  background-color: var(--page);
 }
 
-.header-date {
-  font-size: 13px;
-  color: var(--muted-text);
+.header-titles {
+  display: flex;
+  flex-direction: column;
+}
+
+.page-title {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--teal-900);
+}
+
+.page-subtitle {
+  font-size: 12px;
+  color: var(--muted);
   margin-top: 2px;
 }
 
-/* Summary Cards (Row of 3 cards, 8px radius, no border) */
-.summary-card {
+/* --------------------------------------------------------------------------
+   Summary Cards (8px radius, text/labels as specified)
+   -------------------------------------------------------------------------- */
+.sc-card {
   border-radius: 8px;
-  border: none;
-  padding: 12px 16px;
+  padding: 12px 14px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  animation: riseFade 0.35s ease-out both;
 }
 
-.summary-card.card-cal {
+.sc-card:nth-child(1) {
   background-color: var(--teal-800);
+  animation-delay: 0.04s;
 }
-.summary-card.card-cal .sc-label {
-  color: var(--teal-100);
+.sc-card:nth-child(1) .sc-lbl {
+  color: var(--teal-200);
 }
-.summary-card.card-cal .sc-val {
+.sc-card:nth-child(1) .sc-val {
   color: #FFFFFF;
 }
 
-.summary-card.card-time {
+.sc-card:nth-child(2) {
   background-color: var(--teal-600);
+  animation-delay: 0.08s;
 }
-.summary-card.card-time .sc-label {
+.sc-card:nth-child(2) .sc-lbl {
   color: var(--teal-50);
 }
-.summary-card.card-time .sc-val {
+.sc-card:nth-child(2) .sc-val {
   color: #FFFFFF;
 }
 
-.summary-card.card-streak {
-  background-color: var(--teal-200);
+.sc-card:nth-child(3) {
+  background-color: var(--teal-300);
+  animation-delay: 0.12s;
 }
-.summary-card.card-streak .sc-label {
+.sc-card:nth-child(3) .sc-lbl {
   color: var(--teal-900);
 }
-.summary-card.card-streak .sc-val {
+.sc-card:nth-child(3) .sc-val {
   color: var(--teal-900);
 }
 
-.sc-label {
-  font-size: 12px;
-  font-weight: 400;
+.sc-lbl {
+  font-size: 11px;
   margin-bottom: 4px;
 }
 
@@ -528,36 +482,44 @@ body {
   line-height: 1.2;
 }
 
-/* "This week" Card on --teal-50 (12px radius) */
-.card-week {
-  background-color: var(--teal-50);
+/* --------------------------------------------------------------------------
+   Dashboard Cards ("This week" on --teal-150, "Today" on --teal-200)
+   -------------------------------------------------------------------------- */
+.card-week-box {
+  background-color: var(--teal-150);
   border-radius: 12px;
+  border: 1px solid var(--line);
+  animation: riseFade 0.4s ease-out both;
 }
 
-.card-week-header {
+.card-today-box {
+  background-color: var(--teal-200);
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  animation: riseFade 0.4s ease-out both;
+  animation-delay: 0.05s;
+}
+
+.card-hdr-flex {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
-.card-week-title {
-  font-size: 15px;
+.card-title-900 {
+  font-size: 14px;
   font-weight: 500;
-  color: var(--teal-800);
+  color: var(--teal-900);
 }
 
-.card-week-subtitle {
+.card-sub-600 {
   font-size: 12px;
   color: var(--teal-600);
 }
 
-/* 7-Bar Chart */
-.chart-flex {
-  width: 100%;
-}
-
-.chart-bar-col {
+/* 7 Large Vertical Bars */
+.chart-bar-cell {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -565,7 +527,7 @@ body {
   height: 100%;
 }
 
-.col-cal-val {
+.bar-num-top {
   font-size: 11px;
   height: 16px;
   line-height: 16px;
@@ -573,229 +535,447 @@ body {
   font-weight: 500;
 }
 
-.col-track {
+.bar-lane {
   width: 100%;
-  max-width: 30px;
+  max-width: 38px;
   flex: 1;
   display: flex;
   align-items: flex-end;
 }
 
-.col-fill {
+.bar-rect {
   width: 100%;
-  border-radius: 4px 4px 0 0;
+  border-radius: 6px 6px 0 0;
   transform-origin: bottom;
-  animation: barGrow 0.5s ease-out forwards;
+  animation: barGrow 0.9s ease-out forwards;
 }
 
-.fill-past {
-  background-color: var(--teal-200);
+.rect-past {
+  background-color: var(--teal-300);
 }
 
-.fill-today {
+.rect-today {
   background-color: var(--teal-800);
 }
 
-.fill-future {
-  border: 1px dashed var(--teal-400);
+.rect-ghost {
+  border: 1px dashed var(--teal-500);
   background-color: transparent;
-  height: 100% !important;
+  height: 24px !important;
+  border-radius: 4px;
 }
 
-.col-day-label {
+.bar-day-tag {
   font-size: 11px;
-  color: var(--muted-text);
+  color: var(--muted);
   margin-top: 6px;
 }
 
-.col-day-today {
+.bar-day-today {
   color: var(--teal-900);
-  font-weight: 600;
-}
-
-.chart-bar-col:nth-child(1) .col-fill { animation-delay: 0.03s; }
-.chart-bar-col:nth-child(2) .col-fill { animation-delay: 0.06s; }
-.chart-bar-col:nth-child(3) .col-fill { animation-delay: 0.09s; }
-.chart-bar-col:nth-child(4) .col-fill { animation-delay: 0.12s; }
-.chart-bar-col:nth-child(5) .col-fill { animation-delay: 0.15s; }
-.chart-bar-col:nth-child(6) .col-fill { animation-delay: 0.18s; }
-.chart-bar-col:nth-child(7) .col-fill { animation-delay: 0.21s; }
-
-/* "Today" Card on --teal-100 (12px radius) */
-.card-today {
-  background-color: var(--teal-100);
-  border-radius: 12px;
-}
-
-.card-today-header {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin-bottom: 8px;
-}
-
-.card-today-title {
-  font-size: 15px;
   font-weight: 500;
-  color: var(--teal-900);
 }
 
-.card-today-goal-text {
-  font-size: 12px;
-  color: var(--teal-900);
-}
+.chart-bar-cell:nth-child(1) .bar-rect { animation-delay: 0.00s; }
+.chart-bar-cell:nth-child(2) .bar-rect { animation-delay: 0.07s; }
+.chart-bar-cell:nth-child(3) .bar-rect { animation-delay: 0.14s; }
+.chart-bar-cell:nth-child(4) .bar-rect { animation-delay: 0.21s; }
+.chart-bar-cell:nth-child(5) .bar-rect { animation-delay: 0.28s; }
+.chart-bar-cell:nth-child(6) .bar-rect { animation-delay: 0.35s; }
+.chart-bar-cell:nth-child(7) .bar-rect { animation-delay: 0.42s; }
 
-.progress-track-6px {
+/* "Today" Card Progress & List */
+.progress-track-today {
   width: 100%;
   height: 6px;
   background-color: var(--teal-50);
   border-radius: 3px;
   overflow: hidden;
-  margin-bottom: 12px;
+  margin: 6px 0 10px;
 }
 
-.progress-fill-6px {
+.progress-fill-today {
   height: 100%;
   background-color: var(--teal-800);
   border-radius: 3px;
   max-width: 100%;
-  animation: fillProgress 0.6s ease-out forwards;
+  animation: fillProgress 0.7s ease-out forwards;
 }
 
-.today-scroll-list {
+.today-rows-scroll {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding-right: 4px;
+  padding-right: 2px;
 }
 
-.today-ex-row {
+/* Today Exercise Row on --teal-50 with 8px radius */
+.exercise-row-box {
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 8px 12px;
-  background-color: #FFFFFF;
+  background-color: var(--teal-50);
   border-radius: 8px;
-  animation: rowRise 0.3s ease-out both;
+  animation: riseFade 0.3s ease-out both;
 }
 
-.today-ex-row:nth-child(1) { animation-delay: 0.03s; }
-.today-ex-row:nth-child(2) { animation-delay: 0.06s; }
-.today-ex-row:nth-child(3) { animation-delay: 0.09s; }
-.today-ex-row:nth-child(4) { animation-delay: 0.12s; }
-.today-ex-row:nth-child(5) { animation-delay: 0.15s; }
+.exercise-row-box:nth-child(1) { animation-delay: 0.04s; }
+.exercise-row-box:nth-child(2) { animation-delay: 0.08s; }
+.exercise-row-box:nth-child(3) { animation-delay: 0.12s; }
+.exercise-row-box:nth-child(4) { animation-delay: 0.16s; }
+.exercise-row-box:nth-child(5) { animation-delay: 0.20s; }
 
-.row-name {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--body-text);
-}
-
-.row-sub {
-  font-size: 11px;
-  color: var(--muted-text);
-}
-
-.row-cal {
+.ex-name-500 {
   font-size: 13px;
   font-weight: 500;
   color: var(--teal-900);
 }
 
-.empty-state {
-  padding: 20px;
-  text-align: center;
-  color: var(--muted-text);
+.ex-min-muted {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.ex-kcal-800 {
   font-size: 13px;
-  border: 1px dashed var(--teal-400);
-  border-radius: 8px;
-  background-color: #FFFFFF;
-}
-
-/* Generic View Card styles */
-.content-card {
-  background-color: #FFFFFF;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 16px;
-}
-
-.plans-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.plan-card {
-  background-color: var(--teal-50);
-  border-radius: 12px;
-  padding: 14px;
-}
-
-.plan-header {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.plan-title {
-  font-size: 14px;
   font-weight: 500;
   color: var(--teal-800);
 }
 
-.plan-totals {
-  font-size: 12px;
-  color: var(--teal-600);
+.empty-state-pale {
+  padding: 16px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  background-color: var(--teal-50);
+  border-radius: 8px;
+  border: 1px dashed var(--teal-500);
 }
 
-.plan-items {
+/* --------------------------------------------------------------------------
+   Workout Plans View Cards (3-Position Shading)
+   -------------------------------------------------------------------------- */
+.plans-3col-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.plan-card-item {
+  border-radius: 12px;
+  padding: 14px;
+  animation: riseFade 0.4s ease-out both;
+}
+
+/* Position 1: --teal-800 */
+.plan-shade-1 {
+  background-color: var(--teal-800);
+  color: #FFFFFF;
+}
+.plan-shade-1 .plan-title-head {
+  color: #FFFFFF;
+}
+.plan-shade-1 .plan-sub-tag {
+  color: var(--teal-200);
+}
+.plan-shade-1 .plan-inner-row {
+  background-color: var(--teal-600);
+  color: #FFFFFF;
+}
+.plan-shade-1 .plan-inner-detail {
+  color: var(--teal-200);
+}
+
+/* Position 2: --teal-600 */
+.plan-shade-2 {
+  background-color: var(--teal-600);
+  color: #FFFFFF;
+}
+.plan-shade-2 .plan-title-head {
+  color: #FFFFFF;
+}
+.plan-shade-2 .plan-sub-tag {
+  color: var(--teal-50);
+}
+.plan-shade-2 .plan-inner-row {
+  background-color: var(--teal-500);
+  color: #FFFFFF;
+}
+.plan-shade-2 .plan-inner-detail {
+  color: var(--teal-200);
+}
+
+/* Position 3: --teal-300 */
+.plan-shade-3 {
+  background-color: var(--teal-300);
+  color: var(--teal-900);
+}
+.plan-shade-3 .plan-title-head {
+  color: var(--teal-900);
+}
+.plan-shade-3 .plan-sub-tag {
+  color: var(--teal-800);
+}
+.plan-shade-3 .plan-inner-row {
+  background-color: var(--teal-200);
+  color: var(--teal-900);
+}
+.plan-shade-3 .plan-inner-detail {
+  color: var(--teal-800);
+}
+
+.plan-title-head {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.plan-sub-tag {
+  font-size: 11px;
+  margin-bottom: 10px;
+}
+
+.plan-rows-stack {
   display: flex;
   flex-direction: column;
   gap: 5px;
 }
 
-.plan-item {
+.plan-inner-row {
   font-size: 12px;
   padding: 6px 10px;
-  background-color: #FFFFFF;
   border-radius: 6px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  animation: riseFade 0.3s ease-out both;
 }
 
-/* History table */
-.history-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
+/* Generic Colored Cards */
+.card-teal-200 {
+  background-color: var(--teal-200);
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  padding: 14px;
 }
 
-.history-table th {
-  padding: 10px 14px;
-  background-color: var(--teal-50);
-  color: var(--teal-800);
+.card-teal-150 {
+  background-color: var(--teal-150);
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  padding: 14px;
+}
+
+.card-teal-600 {
+  background-color: var(--teal-600);
+  border-radius: 12px;
+  padding: 14px;
+  color: #FFFFFF;
+}
+
+/* --------------------------------------------------------------------------
+   Log Exercise 2-Column Split
+   -------------------------------------------------------------------------- */
+.log-split-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 14px;
+}
+
+.est-burn-number {
+  font-size: 38px;
   font-weight: 500;
-  text-align: left;
-  border-bottom: 1px solid var(--border);
+  line-height: 1.1;
+  color: #FFFFFF;
+  margin: 6px 0;
+  display: inline-block;
+  transition: transform 0.2s ease;
 }
 
-.history-table td {
-  padding: 10px 14px;
-  border-bottom: 1px solid var(--border);
-  color: var(--body-text);
+.pop-anim {
+  animation: numPop 0.25s ease-out;
 }
 
-/* Mobile & Tablet (< 1000px, 760px, 360px) */
+/* --------------------------------------------------------------------------
+   History View Groups
+   -------------------------------------------------------------------------- */
+.history-date-heading {
+  font-size: 12px;
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+  margin: 12px 0 4px;
+  padding: 0 4px;
+}
+
+.history-date-heading:first-child {
+  margin-top: 0;
+}
+
+.history-day-card {
+  background-color: var(--teal-150);
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  animation: riseFade 0.35s ease-out both;
+}
+
+/* --------------------------------------------------------------------------
+   Profile View Cards
+   -------------------------------------------------------------------------- */
+.profile-grid-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  max-width: 520px;
+}
+
+.stats-3col {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.stat-pale-box {
+  background-color: var(--teal-50);
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+}
+
+.stat-box-num {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--teal-900);
+}
+
+.stat-box-lbl {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   Desktop / Laptop Fit (>= 1000px): NO PAGE SCROLL ON 1366x768
+   -------------------------------------------------------------------------- */
+@media (min-width: 1000px) {
+  html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background-color: var(--page);
+  }
+
+  .app-root {
+    display: grid;
+    grid-template-columns: 170px 1fr;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  .main-area {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .view-container {
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+    padding: 14px 20px;
+  }
+
+  .view-panel {
+    display: none;
+    height: 100%;
+    min-height: 0;
+  }
+
+  .view-panel.active {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Dashboard Grid */
+  #view-dashboard.active {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 12px;
+    height: 100%;
+    min-height: 0;
+  }
+
+  .summary-cards-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .dashboard-split-row {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr; /* 62% This week, 38% Today */
+    gap: 12px;
+    height: 100%;
+    min-height: 0;
+  }
+
+  .card-week-box, .card-today-box {
+    height: 100%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 14px;
+    box-sizing: border-box;
+  }
+
+  .card-week-box .chart-full-height {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 8px;
+    padding-top: 8px;
+  }
+
+  .card-today-box .today-rows-scroll {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  .view-scroll-content {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  .mobile-topbar, .mobile-menu-drawer {
+    display: none !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Mobile & Tablet (< 1000px, 760px, 360px): NORMAL SCROLL
+   -------------------------------------------------------------------------- */
 @media (max-width: 999px) {
   html, body {
     height: auto;
     min-height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
+    background-color: var(--page);
   }
 
   .app-root {
@@ -816,8 +996,8 @@ body {
     justify-content: space-between;
     height: 52px;
     padding: 0 16px;
-    border-bottom: 1px solid var(--border);
-    background-color: var(--bg-page);
+    border-bottom: 1px solid var(--line);
+    background-color: var(--white);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -831,7 +1011,7 @@ body {
 
   .mobile-menu-btn {
     background: transparent;
-    border: 1px solid var(--border);
+    border: 1px solid var(--line);
     border-radius: 8px;
     padding: 6px 12px;
     font-size: 13px;
@@ -843,8 +1023,8 @@ body {
 
   .mobile-menu-drawer {
     display: none;
-    border-bottom: 1px solid var(--border);
-    background-color: var(--bg-page);
+    border-bottom: 1px solid var(--line);
+    background-color: var(--white);
     padding: 12px 16px;
   }
 
@@ -860,21 +1040,23 @@ body {
   }
 
   .main-header {
-    display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 12px;
+    gap: 10px;
     padding: 16px;
-    border-bottom: 1px solid var(--border);
   }
 
-  .btn-header-log {
+  .header-btn-wrap {
+    width: 100%;
+  }
+
+  .header-btn-wrap .btn {
     width: 100%;
     min-height: 44px;
   }
 
   .view-container {
-    padding: 16px;
+    padding: 14px 16px;
   }
 
   .view-panel {
@@ -889,39 +1071,42 @@ body {
     display: grid;
     grid-template-columns: 1fr;
     gap: 10px;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
   }
 
-  .dashboard-bottom-row {
+  .dashboard-split-row {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 14px;
   }
 
-  .card-week, .card-today {
-    padding: 16px;
+  .card-week-box, .card-today-box {
+    padding: 14px;
     border-radius: 12px;
   }
 
-  .card-week .chart-flex {
-    min-height: 160px;
+  .card-week-box .chart-full-height {
+    min-height: 260px; /* At least 260px tall on mobile */
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
     gap: 6px;
-    padding-top: 16px;
+    padding-top: 14px;
   }
 
-  .card-today .today-scroll-list {
-    max-height: 280px;
-    overflow-y: auto;
+  .plans-3col-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .log-split-grid {
+    grid-template-columns: 1fr;
   }
 
   .form-control, input, select, button {
     font-size: 16px !important;
   }
 
-  .btn, .nav-item {
+  .btn, .nav-item, .segment-btn {
     min-height: 44px;
   }
 }

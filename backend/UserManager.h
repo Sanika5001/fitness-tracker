@@ -133,8 +133,8 @@ public:
             errorMsg = "Weight must be between 20 and 300 kg.";
             return false;
         }
-        if (dailyGoal < 50.0 || dailyGoal > 10000.0) {
-            errorMsg = "Daily goal must be between 50 and 10000 kcal.";
+        if (dailyGoal < 100.0 || dailyGoal > 10000.0) {
+            errorMsg = "Daily goal must be between 100 and 10000 kcal.";
             return false;
         }
         std::lock_guard<std::mutex> lock(mtx);

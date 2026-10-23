@@ -9,20 +9,20 @@
 <body>
   <div class="auth-wrapper">
     <div class="auth-card">
-      <h1 class="brand-title">FitTrack</h1>
-      <p class="brand-subtitle">Create a new account</p>
+      <h1 class="auth-brand">FitTrack</h1>
+      <p class="auth-sub">Create a new account</p>
 
       <form id="register-form">
         <div class="form-group">
           <label class="form-label" for="reg-username">Username</label>
           <input class="form-control" type="text" id="reg-username" name="username" required>
-          <span style="font-size: 11px; color: var(--muted-text); display: block; margin-top: 3px;">3 to 20 letters, numbers, or underscores</span>
+          <span class="form-hint">3 to 20 letters, numbers, or underscores</span>
         </div>
 
         <div class="form-group">
           <label class="form-label" for="reg-password">Password</label>
           <input class="form-control" type="password" id="reg-password" name="password" required>
-          <span style="font-size: 11px; color: var(--muted-text); display: block; margin-top: 3px;">Minimum 6 characters</span>
+          <span class="form-hint">Minimum 6 characters</span>
         </div>
 
         <div class="form-group">
@@ -32,8 +32,8 @@
 
         <div class="form-group">
           <label class="form-label" for="reg-weight">Weight (kg)</label>
-          <input class="form-control" type="number" id="reg-weight" name="weight" step="0.5" min="20" max="300" value="70" required>
-          <span style="font-size: 11px; color: var(--muted-text); display: block; margin-top: 3px;">Between 20 and 300 kg</span>
+          <input class="form-control" type="number" id="reg-weight" name="weight" step="0.5" min="20" max="300" value="68" required>
+          <span class="form-hint">Between 20 and 300 kg</span>
         </div>
 
         <div style="margin-top: 16px;">
