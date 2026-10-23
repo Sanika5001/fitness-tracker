@@ -3,21 +3,28 @@
    ========================================================================== */
 
 :root {
-  --page: #FFFFFF;        /* main background, white */
-  --white: #FFFFFF;       /* sidebar, mobile topbar/drawer, auth card */
-  --line: #CFE8DF;        /* borders and dividers, 1px */
-  --teal-900: #04342C;    /* main text on light, primary text on pale cards */
-  --teal-800: #085041;    /* dark cards, primary buttons, today's bar, progress bar */
-  --teal-600: #0F6E56;    /* mid dark cards, avatar */
-  --teal-500: #1D9E75;    /* inner rows on dark cards, dashed outlines */
-  --teal-300: #5DCAA5;    /* Streak card, past bars */
-  --teal-200: #9FE1CB;    /* Today card, active nav item, Recent card */
-  --teal-150: #CDEEDF;    /* This week card, New entry form card */
-  --teal-50:  #E1F5EE;    /* inputs, list rows on pale cards, progress track */
-  --muted: #3F6F61;       /* secondary text */
+  color-scheme: light;
+  --page: #FFFFFF;
+  --white: #FFFFFF;
+  --line: #CFE8DF;
+  --teal-900: #04342C;
+  --teal-800: #085041;
+  --teal-600: #0F6E56;
+  --teal-500: #1D9E75;
+  --teal-300: #5DCAA5;
+  --teal-200: #9FE1CB;
+  --teal-150: #CDEEDF;
+  --teal-50:  #E1F5EE;
+  --muted: #3F6F61;
   --error: #A32D2D;
 
   --font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+html {
+  color-scheme: light;
+  background-color: var(--page);
+  color: var(--teal-900);
 }
 
 *, *::before, *::after {
@@ -287,6 +294,7 @@ b, strong {
   width: 170px;
   height: 100%;
   background-color: var(--white);
+  color: var(--teal-900);
   border-right: 1px solid var(--line);
   display: flex;
   flex-direction: column;
@@ -888,6 +896,7 @@ b, strong {
     min-height: 0;
     overflow: hidden;
     background-color: var(--page);
+    color: var(--teal-900);
   }
 
   .view-container {
@@ -895,6 +904,8 @@ b, strong {
     min-height: 0;
     overflow: hidden;
     padding: 14px 20px;
+    background-color: var(--page);
+    color: var(--teal-900);
   }
 
   .view-panel {
@@ -998,7 +1009,8 @@ b, strong {
     height: 52px;
     padding: 0 16px;
     border-bottom: 1px solid var(--line);
-    background-color: var(--page);
+    background-color: var(--white);
+    color: var(--teal-900);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -1025,7 +1037,8 @@ b, strong {
   .mobile-menu-drawer {
     display: none;
     border-bottom: 1px solid var(--line);
-    background-color: var(--page);
+    background-color: var(--white);
+    color: var(--teal-900);
     padding: 12px 16px;
   }
 
@@ -1039,6 +1052,7 @@ b, strong {
     display: flex;
     flex-direction: column;
     background-color: var(--page);
+    color: var(--teal-900);
   }
 
   .main-header {
