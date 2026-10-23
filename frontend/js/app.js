@@ -1,4 +1,4 @@
-// FitTrack Application Logic - Approved Light Teal Design
+// FitTrack Application Logic - Fresh Light Blue Rebuild
 
 // API helper with Bearer token and 401 redirect
 async function api(path, options = {}) {
@@ -60,8 +60,8 @@ function getGreeting(name) {
 function switchView(viewName) {
   currentView = viewName;
 
-  // Update nav item active state
-  document.querySelectorAll(".nav-item").forEach(btn => {
+  // Update nav tabs active state
+  document.querySelectorAll(".nav-tab, .nav-item").forEach(btn => {
     btn.classList.toggle("active", btn.dataset.view === viewName);
   });
 
@@ -70,7 +70,7 @@ function switchView(viewName) {
     const isActive = panel.id === `view-${viewName}`;
     panel.classList.toggle("active", isActive);
     if (isActive) {
-      // Re-trigger animation by forcing reflow
+      // Re-trigger entrance animation
       panel.style.animation = "none";
       void panel.offsetWidth;
       panel.style.animation = "";
@@ -105,19 +105,19 @@ function updateHeaderForView(viewName) {
   if (viewName === "dashboard") {
     mainTitle.textContent = getGreeting(currentUser.username || "User");
     subTitle.textContent = todayStr;
-    btnWrap.style.display = "block";
+    btnWrap.classList.remove("hidden");
     actionBtn.textContent = "Log exercise";
     actionBtn.onclick = () => switchView("log");
   } else if (viewName === "plans") {
     mainTitle.textContent = "Workout plans";
     subTitle.textContent = "Saved routines and target workouts";
-    btnWrap.style.display = "block";
+    btnWrap.classList.remove("hidden");
     actionBtn.textContent = "New plan";
     actionBtn.onclick = () => {
       const box = document.getElementById("new-plan-box");
       if (box) {
-        box.style.display = box.style.display === "none" ? "block" : "none";
-        if (box.style.display === "block") {
+        box.classList.toggle("hidden");
+        if (!box.classList.contains("hidden")) {
           document.getElementById("new-plan-name").focus();
         }
       }
@@ -125,15 +125,15 @@ function updateHeaderForView(viewName) {
   } else if (viewName === "log") {
     mainTitle.textContent = "Log exercise";
     subTitle.textContent = "Record a workout session";
-    btnWrap.style.display = "none";
+    btnWrap.classList.add("hidden");
   } else if (viewName === "history") {
     mainTitle.textContent = "History";
     subTitle.textContent = "All logged workouts by date";
-    btnWrap.style.display = "none";
+    btnWrap.classList.add("hidden");
   } else if (viewName === "profile") {
     mainTitle.textContent = "Profile";
     subTitle.textContent = "Manage your fitness goals and metrics";
-    btnWrap.style.display = "none";
+    btnWrap.classList.add("hidden");
   }
 }
 
@@ -143,7 +143,7 @@ async function loadDashboard() {
     const summary = await api("/api/summary");
     if (!summary) return;
 
-    // Summary cards: 22px weight 500
+    // Summary cards: 26px weight 500
     const todayCals = Math.round(summary.todayCalories || 0);
     const todayMins = summary.todayMinutes || 0;
     const streakDays = summary.streak || 0;
@@ -159,7 +159,7 @@ async function loadDashboard() {
     progressBar.style.setProperty("--progress-width", `${progressPct}%`);
     document.getElementById("goal-progress-text").textContent = `${todayCals} of ${goal} kcal goal`;
 
-    // Today's exercises: full width --teal-50 boxes
+    // Today's exercises: full width --blue-50 boxes
     const todayList = document.getElementById("today-exercise-list");
     todayList.innerHTML = "";
     if (summary.today && summary.today.length > 0) {
@@ -171,18 +171,18 @@ async function loadDashboard() {
           : `${ex.durationMin} min (${ex.sets} sets x ${ex.reps} reps)`;
         row.innerHTML = `
           <div>
-            <div class="ex-name-500">${escapeHtml(ex.name)}</div>
-            <div class="ex-min-muted">${metaDetail}</div>
+            <div class="ex-name-text">${escapeHtml(ex.name)}</div>
+            <div class="ex-meta-muted">${metaDetail}</div>
           </div>
-          <div class="ex-kcal-800">${Math.round(ex.calories)} kcal</div>
+          <div class="ex-kcal-text">${Math.round(ex.calories)} kcal</div>
         `;
         todayList.appendChild(row);
       });
     } else {
-      todayList.innerHTML = `<div class="empty-state-pale">No exercises logged today. Use the log exercise form to add one.</div>`;
+      todayList.innerHTML = `<div class="empty-state-card">No exercises logged today. Use the log exercise form to add one.</div>`;
     }
 
-    // Weekly 7 large bars Mon to Sun
+    // Weekly 7 vertical bars Mon to Sun
     renderWeeklyChart(summary);
   } catch (err) {
     console.error("Failed to load dashboard summary:", err);
@@ -215,7 +215,6 @@ function renderWeeklyChart(summary) {
   days.forEach((dayName, idx) => {
     const col = document.createElement("div");
     col.className = "chart-bar-cell";
-    col.style.setProperty("--bar-i", idx);
 
     let rectClass = "";
     let calValue = 0;
@@ -224,19 +223,19 @@ function renderWeeklyChart(summary) {
     const isToday = (idx === currentDayIndex);
 
     if (idx < currentDayIndex) {
-      // Past days: --teal-300
+      // Past days: --blue-400
       rectClass = "rect-past";
       calValue = caloriesByDay[dayName] || 0;
       heightPercent = maxVal > 0 ? Math.max(8, Math.round((calValue / maxVal) * 100)) : 8;
       labelVal = calValue > 0 ? `${Math.round(calValue)}` : "";
     } else if (isToday) {
-      // Today: --teal-800 with its calorie value above it and a bold day label
+      // Today: --accent with its calorie value above it and a bold day label
       rectClass = "rect-today";
       calValue = summary.todayCalories || 0;
       heightPercent = maxVal > 0 ? Math.max(8, Math.round((calValue / maxVal) * 100)) : 8;
       labelVal = `${Math.round(calValue)}`;
     } else {
-      // Future days: dashed outlines in --teal-500 at a fixed ghost height
+      // Future days: dashed outlines in --accent at a fixed ghost height
       rectClass = "rect-ghost";
       heightPercent = 0;
       labelVal = "";
@@ -255,16 +254,12 @@ function renderWeeklyChart(summary) {
 
 // 2. Log Exercise View
 async function loadLogExerciseView() {
-  // Set default date to today
   const dateInput = document.getElementById("log-date");
   if (dateInput && !dateInput.value) {
     dateInput.value = new Date().toISOString().split("T")[0];
   }
 
-  // Update estimated burn calculation
   updateLiveEstimate();
-
-  // Load recent 3 entries
   loadRecentEntries();
 }
 
@@ -289,7 +284,7 @@ function updateLiveEstimate() {
   if (numEl.textContent !== String(estimated)) {
     numEl.textContent = estimated;
     numEl.classList.remove("pop-anim");
-    void numEl.offsetWidth; // trigger reflow
+    void numEl.offsetWidth;
     numEl.classList.add("pop-anim");
   }
 }
@@ -305,7 +300,7 @@ async function loadRecentEntries() {
     const recents = allExercisesCache.slice(0, 3);
 
     if (recents.length === 0) {
-      recentList.innerHTML = `<div style="font-size: 12px; color: var(--muted); padding: 4px 0;">No exercises yet.</div>`;
+      recentList.innerHTML = `<div class="ex-meta-muted">No exercises yet.</div>`;
       return;
     }
 
@@ -314,15 +309,15 @@ async function loadRecentEntries() {
       row.className = "exercise-row-box";
       row.innerHTML = `
         <div>
-          <div class="ex-name-500">${escapeHtml(ex.name)}</div>
-          <div class="ex-min-muted">${ex.durationMin} min · ${ex.date}</div>
+          <div class="ex-name-text">${escapeHtml(ex.name)}</div>
+          <div class="ex-meta-muted">${ex.durationMin} min · ${ex.date}</div>
         </div>
-        <div class="ex-kcal-800">${Math.round(ex.calories)} kcal</div>
+        <div class="ex-kcal-text">${Math.round(ex.calories)} kcal</div>
       `;
       recentList.appendChild(row);
     });
   } catch (err) {
-    recentList.innerHTML = `<div style="font-size: 11px; color: var(--error);">Failed to load recent workouts.</div>`;
+    recentList.innerHTML = `<div class="msg-error">Failed to load recent workouts.</div>`;
   }
 }
 
@@ -335,13 +330,12 @@ function setupLogExerciseForm() {
   const form = document.getElementById("log-exercise-form");
   const msg = document.getElementById("log-form-msg");
 
-  // Segmented control toggle
   segCardio.addEventListener("click", () => {
     segCardio.classList.add("active");
     segStrength.classList.remove("active");
     logTypeInput.value = "cardio";
-    cardioFields.style.display = "block";
-    strengthFields.style.display = "none";
+    cardioFields.classList.remove("hidden");
+    strengthFields.classList.add("hidden");
     updateLiveEstimate();
   });
 
@@ -349,12 +343,11 @@ function setupLogExerciseForm() {
     segStrength.classList.add("active");
     segCardio.classList.remove("active");
     logTypeInput.value = "strength";
-    cardioFields.style.display = "none";
-    strengthFields.style.display = "block";
+    cardioFields.classList.add("hidden");
+    strengthFields.classList.remove("hidden");
     updateLiveEstimate();
   });
 
-  // Inputs listen for live estimate updates
   ["log-duration", "log-met", "log-sets", "log-reps"].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.addEventListener("input", updateLiveEstimate);
@@ -418,19 +411,30 @@ async function loadPlans() {
     const plans = await api("/api/plans");
     if (!plans || plans.length === 0) {
       container.innerHTML = `
-        <div class="card-teal-200 empty-state-pale" style="grid-column: 1 / -1; text-align: center;">
-          <p style="margin-bottom: 8px;">No plans yet. Create your first plan.</p>
-          <button class="btn btn-primary" onclick="document.getElementById('new-plan-box').style.display='block'; document.getElementById('new-plan-name').focus();">New plan</button>
+        <div class="card-box card-blue-100 empty-state-card" style="grid-column: 1 / -1;">
+          <p class="mb-10">No plans yet. Create your first plan.</p>
+          <button class="btn btn-accent" id="empty-new-plan-btn">New plan</button>
         </div>
       `;
+      const emptyBtn = document.getElementById("empty-new-plan-btn");
+      if (emptyBtn) {
+        emptyBtn.onclick = () => {
+          const box = document.getElementById("new-plan-box");
+          if (box) {
+            box.classList.remove("hidden");
+            document.getElementById("new-plan-name").focus();
+          }
+        };
+      }
       return;
     }
 
+    const shades = ["card-blue-200", "card-blue-300", "card-blue-400"];
+
     plans.forEach((p, idx) => {
       const card = document.createElement("div");
-      // Cycle shades by position: 1st --teal-800, 2nd --teal-600, 3rd --teal-300
-      const shadeNum = (idx % 3) + 1;
-      card.className = `plan-card-item plan-shade-${shadeNum}`;
+      const shadeClass = shades[idx % 3];
+      card.className = `plan-card-item card-box ${shadeClass}`;
       card.style.animationDelay = `${idx * 0.08}s`;
 
       let exercisesHtml = "";
@@ -438,13 +442,13 @@ async function loadPlans() {
         exercisesHtml = p.exercises.map((ex, exIdx) => {
           return `
             <div class="plan-inner-row" style="animation-delay: ${(idx * 0.08) + (exIdx * 0.04)}s;">
-              <span>${escapeHtml(ex.name)}</span>
-              <span class="plan-inner-detail">${ex.durationMin} min, ${Math.round(ex.calories)} kcal</span>
+              <span class="ex-name-text">${escapeHtml(ex.name)}</span>
+              <span class="ex-meta-muted">${ex.durationMin} min · ${Math.round(ex.calories)} kcal</span>
             </div>
           `;
         }).join("");
       } else {
-        exercisesHtml = `<div style="font-size: 11px; opacity: 0.8; padding: 4px 0;">No exercises in this plan yet.</div>`;
+        exercisesHtml = `<div class="ex-meta-muted">No exercises in this plan yet.</div>`;
       }
 
       card.innerHTML = `
@@ -489,7 +493,8 @@ function setupPlansForms() {
       createMsg.textContent = "Plan created.";
       document.getElementById("new-plan-name").value = "";
       setTimeout(() => {
-        document.getElementById("new-plan-box").style.display = "none";
+        const box = document.getElementById("new-plan-box");
+        if (box) box.classList.add("hidden");
         createMsg.textContent = "";
       }, 1200);
       loadPlans();
@@ -543,7 +548,7 @@ function setupPlansForms() {
   });
 }
 
-// 4. History View: Grouped by date
+// 4. History View
 async function loadHistory() {
   const container = document.getElementById("history-groups-wrap");
   const emptyState = document.getElementById("history-empty");
@@ -552,11 +557,11 @@ async function loadHistory() {
   try {
     const list = await api("/api/exercises");
     if (!list || list.length === 0) {
-      emptyState.style.display = "block";
+      emptyState.classList.remove("hidden");
       return;
     }
 
-    emptyState.style.display = "none";
+    emptyState.classList.add("hidden");
 
     // Group entries by date (newest first)
     const groups = {};
@@ -566,23 +571,20 @@ async function loadHistory() {
       groups[d].push(ex);
     });
 
-    // Render each day as a --teal-150 card containing --teal-50 rows
     Object.keys(groups).forEach((dateStr, groupIdx) => {
       const items = groups[dateStr];
       const dayTotalCals = Math.round(items.reduce((sum, item) => sum + (item.calories || 0), 0));
 
-      // Heading with date on left and total on right
       const heading = document.createElement("div");
       heading.className = "history-date-heading";
       heading.innerHTML = `
         <span>${formatDateHeading(dateStr)}</span>
-        <strong style="color: var(--teal-800);">${dayTotalCals} kcal</strong>
+        <strong class="ex-kcal-text">${dayTotalCals} kcal</strong>
       `;
       container.appendChild(heading);
 
-      // Day card on --teal-150
       const dayCard = document.createElement("div");
-      dayCard.className = "history-day-card";
+      dayCard.className = "card-box card-blue-100 history-day-card";
       dayCard.style.animationDelay = `${groupIdx * 0.06}s`;
 
       items.forEach(item => {
@@ -593,10 +595,10 @@ async function loadHistory() {
           : `${item.durationMin} min (${item.sets} sets x ${item.reps} reps)`;
         row.innerHTML = `
           <div>
-            <div class="ex-name-500">${escapeHtml(item.name)}</div>
-            <div class="ex-min-muted">${metaDetail}</div>
+            <div class="ex-name-text">${escapeHtml(item.name)}</div>
+            <div class="ex-meta-muted">${metaDetail}</div>
           </div>
-          <div class="ex-kcal-800">${Math.round(item.calories)} kcal</div>
+          <div class="ex-kcal-text">${Math.round(item.calories)} kcal</div>
         `;
         dayCard.appendChild(row);
       });
@@ -604,7 +606,7 @@ async function loadHistory() {
       container.appendChild(dayCard);
     });
   } catch (err) {
-    emptyState.style.display = "block";
+    emptyState.classList.remove("hidden");
     emptyState.textContent = "Failed to load history.";
   }
 }
@@ -694,10 +696,13 @@ function updateUserProfileUI(user) {
   const initials = getInitials(user.username);
   const weightText = `${user.weight} kg`;
 
-  // Desktop sidebar
-  document.getElementById("user-display-name").textContent = user.username;
-  document.getElementById("user-display-weight").textContent = weightText;
-  document.getElementById("user-initials").textContent = initials;
+  // Topbar
+  const uName = document.getElementById("user-display-name");
+  const uWeight = document.getElementById("user-display-weight");
+  const uInitials = document.getElementById("user-initials");
+  if (uName) uName.textContent = user.username;
+  if (uWeight) uWeight.textContent = weightText;
+  if (uInitials) uInitials.textContent = initials;
 
   // Mobile drawer
   const mUser = document.getElementById("mobile-user-name");
@@ -738,7 +743,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // Nav buttons event listeners (Desktop & Mobile)
-  document.querySelectorAll(".nav-item").forEach(btn => {
+  document.querySelectorAll(".nav-tab, .nav-item").forEach(btn => {
     btn.addEventListener("click", () => {
       switchView(btn.dataset.view);
     });

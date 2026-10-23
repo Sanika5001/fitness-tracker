@@ -308,6 +308,7 @@ int main() {
     });
 
     svr.set_mount_point("/", "./frontend");
+    svr.set_default_headers({{"Cache-Control", "no-cache"}});
 
     const char* portEnv = std::getenv("PORT");
     int port = portEnv ? std::atoi(portEnv) : 8080;
